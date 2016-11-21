@@ -24,7 +24,7 @@ class EmptyResponseTest extends TestCase
 
     public function testHeaderConstructor()
     {
-        $response = EmptyResponse::withHeaders(['x-empty' => ['true']]);
+        $response = EmptyResponse::withHeaders(array('x-empty' => array('true')));
         $this->assertInstanceOf('Zend\Diactoros\Response', $response);
         $this->assertEquals('', (string) $response->getBody());
         $this->assertEquals(204, $response->getStatusCode());

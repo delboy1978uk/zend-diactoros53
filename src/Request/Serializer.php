@@ -63,9 +63,10 @@ final class Serializer extends AbstractSerializer
 
         list($headers, $body) = self::splitStream($stream);
 
-        return (new Request($uri, $method, $body, $headers))
-            ->withProtocolVersion($version)
+        $request = new Request($uri, $method, $body, $headers);
+        $request->withProtocolVersion($version)
             ->withRequestTarget($requestTarget);
+        return $request;
     }
 
     /**
@@ -123,7 +124,7 @@ final class Serializer extends AbstractSerializer
             throw new UnexpectedValueException('Invalid request line detected');
         }
 
-        return [$matches['method'], $matches['target'], $matches['version']];
+        return array($matches['method'], $matches['target'], $matches['version']);
     }
 
     /**

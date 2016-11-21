@@ -23,7 +23,25 @@ use Zend\Diactoros\Stream;
  */
 class TextResponse extends Response
 {
-    use InjectContentTypeTrait;
+    /**
+     * Inject the provided Content-Type, if none is already present.
+     *
+     * @param string $contentType
+     * @param array $headers
+     * @return array Headers with injected Content-Type
+     */
+    private function injectContentType($contentType, array $headers)
+    {
+        $hasContentType = array_reduce(array_keys($headers), function ($carry, $item) {
+            return $carry ?: (strtolower($item) === 'content-type');
+        }, false);
+
+        if (! $hasContentType) {
+            $headers['content-type'] = array($contentType);
+        }
+
+        return $headers;
+    }
 
     /**
      * Create a plain text response.
@@ -36,7 +54,7 @@ class TextResponse extends Response
      * @param array $headers Array of headers to use at initialization.
      * @throws InvalidArgumentException if $text is neither a string or stream.
      */
-    public function __construct($text, $status = 200, array $headers = [])
+    public function __construct($text, $status = 200, array $headers = array())
     {
         parent::__construct(
             $this->createBody($text),

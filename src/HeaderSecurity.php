@@ -58,7 +58,7 @@ final class HeaderSecurity
             if ($ascii === 13) {
                 $lf = ord($value[$i + 1]);
                 $ws = ord($value[$i + 2]);
-                if ($lf === 10 && in_array($ws, [9, 32], true)) {
+                if ($lf === 10 && in_array($ws, array(9, 32), true)) {
                     $string .= $value[$i] . $value[$i + 1];
                     $i += 1;
                 }

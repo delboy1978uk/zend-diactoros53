@@ -37,12 +37,12 @@ class TextResponseTest extends TestCase
     {
         $body = 'Uh oh not found';
         $status = 404;
-        $headers = [
-            'x-custom' => [ 'foo-bar' ],
-        ];
+        $headers = array(
+            'x-custom' => array( 'foo-bar' ),
+        );
 
         $response = new TextResponse($body, $status, $headers);
-        $this->assertEquals(['foo-bar'], $response->getHeader('x-custom'));
+        $this->assertEquals(array('foo-bar'), $response->getHeader('x-custom'));
         $this->assertEquals('text/plain; charset=utf-8', $response->getHeaderLine('content-type'));
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertSame($body, (string) $response->getBody());
@@ -58,17 +58,17 @@ class TextResponseTest extends TestCase
 
     public function invalidContent()
     {
-        return [
-            'null'       => [null],
-            'true'       => [true],
-            'false'      => [false],
-            'zero'       => [0],
-            'int'        => [1],
-            'zero-float' => [0.0],
-            'float'      => [1.1],
-            'array'      => [['php://temp']],
-            'object'     => [(object) ['php://temp']],
-        ];
+        return array(
+            'null'       => array(null),
+            'true'       => array(true),
+            'false'      => array(false),
+            'zero'       => array(0),
+            'int'        => array(1),
+            'zero-float' => array(0.0),
+            'float'      => array(1.1),
+            'array'      => array(array('php://temp')),
+            'object'     => array((object) array('php://temp')),
+        );
     }
 
     /**

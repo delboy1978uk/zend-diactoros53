@@ -58,7 +58,7 @@ trait RequestTrait
      * @param array $headers Headers for the message, if any.
      * @throws InvalidArgumentException for any invalid value.
      */
-    private function initialize($uri = null, $method = null, $body = 'php://memory', array $headers = [])
+    private function initialize($uri = null, $method = null, $body = 'php://memory', array $headers = array())
     {
         $this->validateMethod($method);
 
@@ -74,7 +74,7 @@ trait RequestTrait
         // Host header is provided
         if (! $this->hasHeader('Host') && $this->uri->getHost()) {
             $this->headerNames['host'] = 'Host';
-            $this->headers['Host'] = [$this->getHostFromUri()];
+            $this->headers['Host'] = array($this->getHostFromUri());
         }
     }
 
@@ -280,7 +280,7 @@ trait RequestTrait
             }
         }
 
-        $new->headers['Host'] = [$host];
+        $new->headers['Host'] = array($host);
 
         return $new;
     }

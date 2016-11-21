@@ -88,14 +88,14 @@ abstract class AbstractSerializer
      */
     protected static function splitStream(StreamInterface $stream)
     {
-        $headers       = [];
+        $headers       = array();
         $currentHeader = false;
 
         while ($line = self::getLine($stream)) {
             if (preg_match(';^(?P<name>[!#$%&\'*+.^_`\|~0-9a-zA-Z-]+):(?P<value>.*)$;', $line, $matches)) {
                 $currentHeader = $matches['name'];
                 if (! isset($headers[$currentHeader])) {
-                    $headers[$currentHeader] = [];
+                    $headers[$currentHeader] = array();
                 }
                 $headers[$currentHeader][] = ltrim($matches['value']);
                 continue;
@@ -115,7 +115,7 @@ abstract class AbstractSerializer
         }
 
         // use RelativeStream to avoid copying initial stream into memory
-        return [$headers, new RelativeStream($stream, $stream->tell())];
+        return array($headers, new RelativeStream($stream, $stream->tell()));
     }
 
     /**
@@ -126,7 +126,7 @@ abstract class AbstractSerializer
      */
     protected static function serializeHeaders(array $headers)
     {
-        $lines = [];
+        $lines = array();
         foreach ($headers as $header => $values) {
             $normalized = self::filterHeader($header);
             foreach ($values as $value) {

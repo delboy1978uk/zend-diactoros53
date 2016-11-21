@@ -30,8 +30,8 @@ class SapiStreamEmitterTest extends SapiEmitterTest
         $stream = new CallbackStream(function () {
             return 'it works';
         });
-        $response = (new Response())
-            ->withStatus(200)
+        $response = new Response();
+        $response->withStatus(200)
             ->withBody($stream);
         ob_start();
         $this->emitter->emit($response);
@@ -46,8 +46,8 @@ class SapiStreamEmitterTest extends SapiEmitterTest
         $stream->eof()->willReturn(true);
         $stream->rewind()->willReturn(true);
         $stream->getSize()->willReturn(null);
-        $response = (new Response())
-            ->withStatus(200)
+        $response = new Response();
+        $response->withStatus(200)
             ->withBody($stream->reveal());
 
         ob_start();
@@ -60,10 +60,10 @@ class SapiStreamEmitterTest extends SapiEmitterTest
 
     public function contentRangeProvider()
     {
-        return [
-            ['bytes 0-2/*', 'Hello world', 'Hel'],
-            ['bytes 3-6/*', 'Hello world', 'lo w'],
-        ];
+        return array(
+            array('bytes 0-2/*', 'Hello world', 'Hel'),
+            array('bytes 3-6/*', 'Hello world', 'lo w'),
+        );
     }
 
     /**
@@ -71,8 +71,8 @@ class SapiStreamEmitterTest extends SapiEmitterTest
      */
     public function testContentRange($header, $body, $expected)
     {
-        $response = (new Response())
-            ->withHeader('Content-Range', $header);
+        $response = new Response();
+        $response->withHeader('Content-Range', $header);
 
         $response->getBody()->write($body);
 
@@ -86,8 +86,8 @@ class SapiStreamEmitterTest extends SapiEmitterTest
         $body = new CallbackStream(function () {
             return 'Hello world';
         });
-        $response = (new Response())
-            ->withBody($body)
+        $response = new Response();
+        $response->withBody($body)
             ->withHeader('Content-Range', 'bytes 3-6/*');
 
         ob_start();

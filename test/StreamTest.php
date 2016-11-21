@@ -77,7 +77,7 @@ class StreamTest extends TestCase
     public function testPassingInvalidStreamResourceToConstructorRaisesException()
     {
         $this->setExpectedException('InvalidArgumentException');
-        $stream = new Stream(['  THIS WILL NOT WORK  ']);
+        $stream = new Stream(array('  THIS WILL NOT WORK  '));
     }
 
     public function testStringSerializationReturnsEmptyStringWhenStreamIsNotReadable()
@@ -259,29 +259,29 @@ class StreamTest extends TestCase
 
     public function provideDataForIsWritable()
     {
-        return [
-            ['a',   true,  true],
-            ['a+',  true,  true],
-            ['a+b', true,  true],
-            ['ab',  true,  true],
-            ['c',   true,  true],
-            ['c+',  true,  true],
-            ['c+b', true,  true],
-            ['cb',  true,  true],
-            ['r',   true,  false],
-            ['r+',  true,  true],
-            ['r+b', true,  true],
-            ['rb',  true,  false],
-            ['rw',  true,  true],
-            ['w',   true,  true],
-            ['w+',  true,  true],
-            ['w+b', true,  true],
-            ['wb',  true,  true],
-            ['x',   false, true],
-            ['x+',  false, true],
-            ['x+b', false, true],
-            ['xb',  false, true],
-        ];
+        return array(
+            array('a',   true,  true),
+            array('a+',  true,  true),
+            array('a+b', true,  true),
+            array('ab',  true,  true),
+            array('c',   true,  true),
+            array('c+',  true,  true),
+            array('c+b', true,  true),
+            array('cb',  true,  true),
+            array('r',   true,  false),
+            array('r+',  true,  true),
+            array('r+b', true,  true),
+            array('rb',  true,  false),
+            array('rw',  true,  true),
+            array('w',   true,  true),
+            array('w+',  true,  true),
+            array('w+b', true,  true),
+            array('wb',  true,  true),
+            array('x',   false, true),
+            array('x+',  false, true),
+            array('x+b', false, true),
+            array('xb',  false, true),
+        );
     }
 
     private function findNonExistentTempName()
@@ -314,29 +314,29 @@ class StreamTest extends TestCase
 
     public function provideDataForIsReadable()
     {
-        return [
-            ['a',   true,  false],
-            ['a+',  true,  true],
-            ['a+b', true,  true],
-            ['ab',  true,  false],
-            ['c',   true,  false],
-            ['c+',  true,  true],
-            ['c+b', true,  true],
-            ['cb',  true,  false],
-            ['r',   true,  true],
-            ['r+',  true,  true],
-            ['r+b', true,  true],
-            ['rb',  true,  true],
-            ['rw',  true,  true],
-            ['w',   true,  false],
-            ['w+',  true,  true],
-            ['w+b', true,  true],
-            ['wb',  true,  false],
-            ['x',   false, false],
-            ['x+',  false, true],
-            ['x+b', false, true],
-            ['xb',  false, false],
-        ];
+        return array(
+            array('a',   true,  false),
+            array('a+',  true,  true),
+            array('a+b', true,  true),
+            array('ab',  true,  false),
+            array('c',   true,  false),
+            array('c+',  true,  true),
+            array('c+b', true,  true),
+            array('cb',  true,  false),
+            array('r',   true,  true),
+            array('r+',  true,  true),
+            array('r+b', true,  true),
+            array('rb',  true,  true),
+            array('rw',  true,  true),
+            array('w',   true,  false),
+            array('w+',  true,  true),
+            array('w+b', true,  true),
+            array('wb',  true,  false),
+            array('x',   false, false),
+            array('x+',  false, true),
+            array('x+b', false, true),
+            array('xb',  false, false),
+        );
     }
 
     /**
@@ -420,16 +420,16 @@ class StreamTest extends TestCase
     public function invalidResources()
     {
         $this->tmpnam = tempnam(sys_get_temp_dir(), 'diac');
-        return [
-            'null' => [ null ],
-            'false' => [ false ],
-            'true' => [ true ],
-            'int' => [ 1 ],
-            'float' => [ 1.1 ],
-            'string-non-resource' => [ 'foo-bar-baz' ],
-            'array' => [ [ fopen($this->tmpnam, 'r+') ] ],
-            'object' => [ (object) [ 'resource' => fopen($this->tmpnam, 'r+') ] ],
-        ];
+        return array(
+            'null' => array( null ),
+            'false' => array( false ),
+            'true' => array( true ),
+            'int' => array( 1 ),
+            'float' => array( 1.1 ),
+            'string-non-resource' => array( 'foo-bar-baz' ),
+            'array' => array( array( fopen($this->tmpnam, 'r+') ) ),
+            'object' => array( (object) array( 'resource' => fopen($this->tmpnam, 'r+') ) ),
+        );
     }
 
     /**

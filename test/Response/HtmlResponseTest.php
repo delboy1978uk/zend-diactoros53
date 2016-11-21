@@ -9,6 +9,7 @@
 
 namespace ZendTest\Diactoros\Response;
 
+use InvalidArgumentException;
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Diactoros\Response\HtmlResponse;
 
@@ -37,12 +38,12 @@ class HtmlResponseTest extends TestCase
     {
         $body = '<html>Uh oh not found</html>';
         $status = 404;
-        $headers = [
-            'x-custom' => [ 'foo-bar' ],
-        ];
+        $headers = array(
+            'x-custom' => array( 'foo-bar' ),
+        );
 
         $response = new HtmlResponse($body, $status, $headers);
-        $this->assertEquals(['foo-bar'], $response->getHeader('x-custom'));
+        $this->assertEquals(array('foo-bar'), $response->getHeader('x-custom'));
         $this->assertEquals('text/html; charset=utf-8', $response->getHeaderLine('content-type'));
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertSame($body, (string) $response->getBody());
@@ -58,17 +59,17 @@ class HtmlResponseTest extends TestCase
 
     public function invalidHtmlContent()
     {
-        return [
-            'null'       => [null],
-            'true'       => [true],
-            'false'      => [false],
-            'zero'       => [0],
-            'int'        => [1],
-            'zero-float' => [0.0],
-            'float'      => [1.1],
-            'array'      => [['php://temp']],
-            'object'     => [(object) ['php://temp']],
-        ];
+        return array(
+            'null'       => array(null),
+            'true'       => array(true),
+            'false'      => array(false),
+            'zero'       => array(0),
+            'int'        => array(1),
+            'zero-float' => array(0.0),
+            'float'      => array(1.1),
+            'array'      => array(array('php://temp')),
+            'object'     => array((object) array('php://temp')),
+        );
     }
 
     /**
@@ -77,7 +78,7 @@ class HtmlResponseTest extends TestCase
      */
     public function testRaisesExceptionforNonStringNonStreamBodyContent($body)
     {
-        $response = new HtmlResponse($body);
+        new HtmlResponse($body);
     }
 
     public function testConstructorRewindsBodyStream()

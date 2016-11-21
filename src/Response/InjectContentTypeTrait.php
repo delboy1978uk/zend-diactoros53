@@ -25,7 +25,7 @@ trait InjectContentTypeTrait
         }, false);
 
         if (! $hasContentType) {
-            $headers['content-type'] = [$contentType];
+            $headers['content-type'] = array($contentType);
         }
 
         return $headers;

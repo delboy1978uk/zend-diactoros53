@@ -156,7 +156,7 @@ class Server
      *
      * @param null|callable $finalHandler
      */
-    public function listen(callable $finalHandler = null)
+    public function listen($finalHandler = null)
     {
         $callback = $this->callback;
 

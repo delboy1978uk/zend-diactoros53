@@ -22,7 +22,25 @@ use Zend\Diactoros\Stream;
  */
 class JsonResponse extends Response
 {
-    use InjectContentTypeTrait;
+    /**
+     * Inject the provided Content-Type, if none is already present.
+     *
+     * @param string $contentType
+     * @param array $headers
+     * @return array Headers with injected Content-Type
+     */
+    private function injectContentType($contentType, array $headers)
+    {
+        $hasContentType = array_reduce(array_keys($headers), function ($carry, $item) {
+            return $carry ?: (strtolower($item) === 'content-type');
+        }, false);
+
+        if (! $hasContentType) {
+            $headers['content-type'] = array($contentType);
+        }
+
+        return $headers;
+    }
 
     /**
      * Default flags for json_encode; value of:
@@ -56,7 +74,7 @@ class JsonResponse extends Response
     public function __construct(
         $data,
         $status = 200,
-        array $headers = [],
+        array $headers = array(),
         $encodingOptions = self::DEFAULT_JSON_FLAGS
     ) {
         $body = new Stream('php://temp', 'wb+');

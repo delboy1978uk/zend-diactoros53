@@ -163,7 +163,7 @@ abstract class ServerRequestFactory
      */
     public static function normalizeFiles(array $files)
     {
-        $normalized = [];
+        $normalized = array();
         foreach ($files as $key => $value) {
             if ($value instanceof UploadedFileInterface) {
                 $normalized[$key] = $value;
@@ -193,7 +193,7 @@ abstract class ServerRequestFactory
      */
     public static function marshalHeaders(array $server)
     {
-        $headers = [];
+        $headers = array();
         foreach ($server as $key => $value) {
             // Apache prefixes environment variables with REDIRECT_
             // if they are added by rewrite rules
@@ -247,7 +247,7 @@ abstract class ServerRequestFactory
         }
 
         // Set the host
-        $accumulator = (object) ['host' => '', 'port' => null];
+        $accumulator = (object) array('host' => '', 'port' => null);
         self::marshalHostAndPortFromHeaders($accumulator, $server, $headers);
         $host = $accumulator->host;
         $port = $accumulator->port;
@@ -448,17 +448,17 @@ abstract class ServerRequestFactory
      * @param array $files
      * @return UploadedFileInterface[]
      */
-    private static function normalizeNestedFileSpec(array $files = [])
+    private static function normalizeNestedFileSpec(array $files = array())
     {
-        $normalizedFiles = [];
+        $normalizedFiles = array();
         foreach (array_keys($files['tmp_name']) as $key) {
-            $spec = [
+            $spec = array(
                 'tmp_name' => $files['tmp_name'][$key],
                 'size'     => $files['size'][$key],
                 'error'    => $files['error'][$key],
                 'name'     => $files['name'][$key],
                 'type'     => $files['type'][$key],
-            ];
+            );
             $normalizedFiles[$key] = self::createUploadedFileFromSpec($spec);
         }
         return $normalizedFiles;

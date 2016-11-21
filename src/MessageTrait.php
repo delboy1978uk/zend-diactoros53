@@ -24,14 +24,14 @@ trait MessageTrait
      *
      * @var array
      */
-    protected $headers = [];
+    protected $headers = array();
 
     /**
      * Map of normalized header name to original name used to register header.
      *
      * @var array
      */
-    protected $headerNames = [];
+    protected $headerNames = array();
 
     /**
      * @var string
@@ -132,12 +132,12 @@ trait MessageTrait
     public function getHeader($header)
     {
         if (! $this->hasHeader($header)) {
-            return [];
+            return array();
         }
 
         $header = $this->headerNames[strtolower($header)];
         $value  = $this->headers[$header];
-        $value  = is_array($value) ? $value : [$value];
+        $value  = is_array($value) ? $value : array($value);
 
         return $value;
     }
@@ -183,14 +183,14 @@ trait MessageTrait
      * new and/or updated header and value.
      *
      * @param string $header Case-insensitive header field name.
-     * @param string|string[] $value Header value(s).
+     * @param string|stringarray() $value Header value(s).
      * @return static
      * @throws \InvalidArgumentException for invalid header names or values.
      */
     public function withHeader($header, $value)
     {
         if (is_string($value)) {
-            $value = [$value];
+            $value = array($value);
         }
 
         if (! is_array($value) || ! $this->arrayContainsOnlyStrings($value)) {
@@ -234,7 +234,7 @@ trait MessageTrait
     public function withAddedHeader($header, $value)
     {
         if (is_string($value)) {
-            $value = [ $value ];
+            $value = array( $value );
         }
 
         if (! is_array($value) || ! $this->arrayContainsOnlyStrings($value)) {
@@ -339,7 +339,7 @@ trait MessageTrait
      */
     private function arrayContainsOnlyStrings(array $array)
     {
-        return array_reduce($array, [__CLASS__, 'filterStringValue'], true);
+        return array_reduce($array, array(__CLASS__, 'filterStringValue'), true);
     }
 
     /**
@@ -352,7 +352,7 @@ trait MessageTrait
      */
     private function filterHeaders(array $originalHeaders)
     {
-        $headerNames = $headers = [];
+        $headerNames = $headers = array();
         foreach ($originalHeaders as $header => $value) {
             if (! is_string($header)) {
                 throw new InvalidArgumentException(sprintf(
@@ -380,14 +380,14 @@ trait MessageTrait
             }
 
             if (! is_array($value)) {
-                $value = [ $value ];
+                $value = array( $value );
             }
 
             $headerNames[strtolower($header)] = $header;
             $headers[$header] = $value;
         }
 
-        return [$headerNames, $headers];
+        return array($headerNames, $headers);
     }
 
     /**

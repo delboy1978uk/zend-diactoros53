@@ -24,10 +24,10 @@ class CallbackStream implements StreamInterface
     protected $callback;
 
     /**
-     * @param callable $callback
+     * @param $callback
      * @throws InvalidArgumentException
      */
-    public function __construct(callable $callback)
+    public function __construct($callback)
     {
         $this->attach($callback);
     }
@@ -61,10 +61,10 @@ class CallbackStream implements StreamInterface
     /**
      * Attach a new callback to the instance.
      *
-     * @param callable $callback
+     * @param $callback
      * @throws InvalidArgumentException for callable callback
      */
-    public function attach(callable $callback)
+    public function attach($callback)
     {
         $this->callback = $callback;
     }
@@ -162,11 +162,11 @@ class CallbackStream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        $metadata = [
+        $metadata = array(
             'eof' => $this->eof(),
             'stream_type' => 'callback',
             'seekable' => false
-        ];
+        );
 
         if (null === $key) {
             return $metadata;
