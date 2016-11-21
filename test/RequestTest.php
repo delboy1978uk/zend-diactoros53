@@ -284,7 +284,7 @@ class RequestTest extends TestCase
     public function testCanProvideARequestTarget($requestTarget)
     {
         $request = new Request();
-        $request->withRequestTarget($requestTarget);
+        $request = $request->withRequestTarget($requestTarget);
         $this->assertEquals($requestTarget, $request->getRequestTarget());
     }
 
@@ -298,7 +298,7 @@ class RequestTest extends TestCase
     public function testRequestTargetDoesNotCacheBetweenInstances()
     {
         $request = new Request();
-        $request->withUri(new Uri('https://example.com/foo/bar'));
+        $request = $request->withUri(new Uri('https://example.com/foo/bar'));
         $original = $request->getRequestTarget();
         $newRequest = $request->withUri(new Uri('http://mwop.net/bar/baz'));
         $this->assertNotEquals($original, $newRequest->getRequestTarget());
@@ -307,7 +307,7 @@ class RequestTest extends TestCase
     public function testSettingNewUriResetsRequestTarget()
     {
         $request = new Request();
-        $request->withUri(new Uri('https://example.com/foo/bar'));
+        $request = $request->withUri(new Uri('https://example.com/foo/bar'));
         $request->getRequestTarget();
         $request->withUri(new Uri('http://mwop.net/bar/baz'));
     }
@@ -418,10 +418,10 @@ class RequestTest extends TestCase
     public function testPassingPreserveHostFlagWhenUpdatingUriDoesNotUpdateHostHeader()
     {
         $request = new Request();
-        $request->withAddedHeader('Host', 'example.com');
+        $request = $request->withAddedHeader('Host', 'example.com');
 
         $uri = new Uri();
-        $uri->withHost('www.example.com');
+        $uri = $uri->withHost('www.example.com');
         $new = $request->withUri($uri, true);
 
         $this->assertEquals('example.com', $new->getHeaderLine('Host'));
@@ -430,7 +430,7 @@ class RequestTest extends TestCase
     public function testNotPassingPreserveHostFlagWhenUpdatingUriWithoutHostDoesNotUpdateHostHeader()
     {
         $request = new Request();
-        $request->withAddedHeader('Host', 'example.com');
+        $request = $request->withAddedHeader('Host', 'example.com');
 
         $uri = new Uri();
         $new = $request->withUri($uri);
@@ -444,7 +444,7 @@ class RequestTest extends TestCase
         $request->withAddedHeader('Host', 'example.com');
 
         $uri = new Uri();
-        $uri->withHost('www.example.com')
+        $uri = $uri->withHost('www.example.com')
             ->withPort(10081);
         $new = $request->withUri($uri);
 
@@ -508,7 +508,7 @@ class RequestTest extends TestCase
     public function testWithUriAndNoPreserveHostWillOverwriteHostHeaderRegardlessOfOriginalCase($hostKey)
     {
         $request = new Request();
-        $request->withHeader($hostKey, 'example.com');
+        $request = $request->withHeader($hostKey, 'example.com');
 
         $uri  = new Uri('http://example.org/foo/bar');
         $new  = $request->withUri($uri);

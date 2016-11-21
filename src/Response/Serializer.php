@@ -53,7 +53,7 @@ final class Serializer extends AbstractSerializer
         list($headers, $body)                  = self::splitStream($stream);
 
         $response = new Response($body, $status, $headers);
-        $response->withProtocolVersion($version)
+        $response = $response->withProtocolVersion($version)
             ->withStatus((int) $status, $reasonPhrase);
         return $response;
     }

@@ -21,9 +21,9 @@ class SerializerTest extends TestCase
     public function testSerializesBasicRequest()
     {
         $request = new Request();
-        $request->withMethod('GET')
-            ->withUri(new Uri('http://example.com/foo/bar?baz=bat'))
-            ->withAddedHeader('Accept', 'text/html');
+        $request = $request->withMethod('GET');
+        $request = $request->withUri(new Uri('http://example.com/foo/bar?baz=bat'));
+        $request = $request->withAddedHeader('Accept', 'text/html');
 
         $message = Serializer::toString($request);
         $this->assertEquals(
@@ -39,11 +39,11 @@ class SerializerTest extends TestCase
         $stream->write($body);
 
         $request = new Request();
-        $request->withMethod('POST')
-            ->withUri(new Uri('http://example.com/foo/bar'))
-            ->withAddedHeader('Accept', 'application/json')
-            ->withAddedHeader('Content-Type', 'application/json')
-            ->withBody($stream);
+        $request = $request->withMethod('POST');
+        $request = $request->withUri(new Uri('http://example.com/foo/bar'));
+        $request = $request->withAddedHeader('Accept', 'application/json');
+        $request = $request->withAddedHeader('Content-Type', 'application/json');
+        $request = $request->withBody($stream);
 
         $message = Serializer::toString($request);
         $this->assertContains("POST /foo/bar HTTP/1.1\r\n", $message);
@@ -53,10 +53,10 @@ class SerializerTest extends TestCase
     public function testSerializesMultipleHeadersCorrectly()
     {
         $request = new Request();
-        $request->withMethod('GET')
-            ->withUri(new Uri('http://example.com/foo/bar?baz=bat'))
-            ->withAddedHeader('X-Foo-Bar', 'Baz')
-            ->withAddedHeader('X-Foo-Bar', 'Bat');
+        $request = $request->withMethod('GET');
+        $request = $request->withUri(new Uri('http://example.com/foo/bar?baz=bat'));
+        $request = $request->withAddedHeader('X-Foo-Bar', 'Baz');
+        $request = $request->withAddedHeader('X-Foo-Bar', 'Bat');
 
         $message = Serializer::toString($request);
         $this->assertContains("X-Foo-Bar: Baz", $message);

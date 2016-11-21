@@ -560,7 +560,7 @@ class Response implements ResponseInterface
      */
     public function getStatusCode()
     {
-        return $this->statusCode;
+        return (int) $this->statusCode;
     }
 
     /**

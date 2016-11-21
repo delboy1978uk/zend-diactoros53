@@ -64,7 +64,7 @@ final class Serializer extends AbstractSerializer
         list($headers, $body) = self::splitStream($stream);
 
         $request = new Request($uri, $method, $body, $headers);
-        $request->withProtocolVersion($version)
+        $request = $request->withProtocolVersion($version)
             ->withRequestTarget($requestTarget);
         return $request;
     }

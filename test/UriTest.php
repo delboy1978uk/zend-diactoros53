@@ -151,7 +151,7 @@ class UriTest extends TestCase
     {
         $uri = new Uri('https://user:pass@local.example.com:3001/foo?bar=baz#quz');
         $this->setExpectedException('InvalidArgumentException', 'Invalid port');
-        $new = $uri->withPort($port);
+        $uri->withPort($port);
     }
 
     public function testWithPathReturnsNewInstanceWithProvidedPath()
@@ -192,7 +192,7 @@ class UriTest extends TestCase
     {
         $uri = new Uri('https://user:pass@local.example.com:3001/foo?bar=baz#quz');
         $this->setExpectedException('InvalidArgumentException', 'Invalid path');
-        $new = $uri->withPath($path);
+        $uri->withPath($path);
     }
 
     public function testWithQueryReturnsNewInstanceWithProvidedQuery()
@@ -223,7 +223,7 @@ class UriTest extends TestCase
     {
         $uri = new Uri('https://user:pass@local.example.com:3001/foo?bar=baz#quz');
         $this->setExpectedException('InvalidArgumentException', 'Query string');
-        $new = $uri->withQuery($query);
+        $uri->withQuery($query);
     }
 
     public function testWithFragmentReturnsNewInstanceWithProvidedFragment()
@@ -354,7 +354,7 @@ class UriTest extends TestCase
     public function testConstructWithUnsupportedSchemeRaisesAnException($scheme)
     {
         $this->setExpectedException('InvalidArgumentException', 'Unsupported scheme');
-        $uri = new Uri($scheme . '://example.com');
+        new Uri($scheme . '://example.com');
     }
 
     /**
@@ -409,9 +409,9 @@ class UriTest extends TestCase
     public function testAuthorityOmitsPortForStandardSchemePortCombinations($scheme, $port)
     {
         $uri = new Uri();
-        $uri->withHost('example.com')
-            ->withScheme($scheme)
-            ->withPort($port);
+        $uri = $uri->withHost('example.com');
+        $uri = $uri->withScheme($scheme);
+        $uri = $uri->withPort($port);
         $this->assertEquals('example.com', $uri->getAuthority());
     }
 
@@ -448,7 +448,7 @@ class UriTest extends TestCase
     public function testPathIsProperlyEncoded()
     {
         $uri = new Uri();
-        $uri->withPath('/foo^bar');
+        $uri = $uri->withPath('/foo^bar');
         $expected = '/foo%5Ebar';
         $this->assertEquals($expected, $uri->getPath());
     }
@@ -456,7 +456,7 @@ class UriTest extends TestCase
     public function testPathDoesNotBecomeDoubleEncoded()
     {
         $uri = new Uri();
-        $uri->withPath('/foo%5Ebar');
+        $uri = $uri = $uri->withPath('/foo%5Ebar');
         $expected = '/foo%5Ebar';
         $this->assertEquals($expected, $uri->getPath());
     }
@@ -479,7 +479,7 @@ class UriTest extends TestCase
     public function testQueryIsProperlyEncoded($query, $expected)
     {
         $uri = new Uri();
-        $uri->withQuery($query);
+        $uri = $uri->withQuery($query);
         $this->assertEquals($expected, $uri->getQuery());
     }
 
@@ -490,7 +490,7 @@ class UriTest extends TestCase
     public function testQueryIsNotDoubleEncoded($query, $expected)
     {
         $uri = new Uri();
-        $uri->withQuery($expected);
+        $uri = $uri->withQuery($expected);
         $this->assertEquals($expected, $uri->getQuery());
     }
 
@@ -500,7 +500,7 @@ class UriTest extends TestCase
     public function testFragmentIsProperlyEncoded()
     {
         $uri = new Uri();
-        $uri->withFragment('/p^th?key^=`bar#b@z');
+        $uri = $uri->withFragment('/p^th?key^=`bar#b@z');
         $expected = '/p%5Eth?key%5E=%60bar%23b@z';
         $this->assertEquals($expected, $uri->getFragment());
     }
@@ -512,7 +512,7 @@ class UriTest extends TestCase
     {
         $expected = '/p%5Eth?key%5E=%60bar%23b@z';
         $uri = new Uri();
-        $uri->withFragment($expected);
+        $uri = $uri->withFragment($expected);
         $this->assertEquals($expected, $uri->getFragment());
     }
 
@@ -615,7 +615,7 @@ class UriTest extends TestCase
     public function testUriDoesNotAppendColonToHostIfPortIsEmpty()
     {
         $uri = new Uri();
-        $uri->withHost('google.com');
+        $uri = $uri->withHost('google.com');
         $this->assertEquals('google.com', (string) $uri);
     }
 }
