@@ -188,11 +188,11 @@ class CallbackStreamTest extends TestCase
         $this->assertFalse($ret);
 
         $all = $stream->getMetadata();
-        $this->assertSame([
+        $this->assertSame(array(
             'eof' => false,
             'stream_type' => 'callback',
             'seekable' => false,
-        ], $all);
+        ), $all);
 
         $notExists = $stream->getMetadata('boo');
         $this->assertNull($notExists);
@@ -203,10 +203,10 @@ class CallbackStreamTest extends TestCase
         $class = 'ZendTest\Diactoros\CallbackStreamTest';
 
         // @codingStandardsIgnoreStart
-        return [
-            'instance-method' => [[new self(), 'sampleCallback'],   $class . '::sampleCallback'],
-            'static-method'   => [[$class, 'sampleStaticCallback'], $class . '::sampleStaticCallback'],
-        ];
+        return array(
+            'instance-method' => array(array(new self(), 'sampleCallback'),   $class . '::sampleCallback'),
+            'static-method'   => array(array($class, 'sampleStaticCallback'), $class . '::sampleStaticCallback'),
+        );
         // @codingStandardsIgnoreEnd
     }
 

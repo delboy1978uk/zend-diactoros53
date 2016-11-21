@@ -42,19 +42,19 @@ class MessageTraitTest extends TestCase
 
     public function invalidProtocolVersionProvider()
     {
-        return [
-            'null'                 => [ null ],
-            'true'                 => [ true ],
-            'false'                => [ false ],
-            'int'                  => [ 1 ],
-            'float'                => [ 1.1 ],
-            'array'                => [ ['1.1'] ],
-            'stdClass'             => [ (object) [ 'version' => '1.0'] ],
-            '1-without-minor'      => [ '1' ],
-            '1-with-invalid-minor' => [ '1.2' ],
-            '1-with-hotfix'        => [ '1.2.3' ],
-            '2-with-minor'         => [ '2.0' ],
-        ];
+        return array(
+            'null'                 => array( null ),
+            'true'                 => array( true ),
+            'false'                => array( false ),
+            'int'                  => array( 1 ),
+            'float'                => array( 1.1 ),
+            'array'                => array( array('1.1') ),
+            'stdClass'             => array( (object) array( 'version' => '1.0') ),
+            '1-without-minor'      => array( '1' ),
+            '1-with-invalid-minor' => array( '1.2' ),
+            '1-with-hotfix'        => array( '1.2.3' ),
+            '2-with-minor'         => array( '2.0' ),
+        );
     }
 
     /**
@@ -84,23 +84,23 @@ class MessageTraitTest extends TestCase
 
     public function testGetHeaderReturnsHeaderValueAsArray()
     {
-        $message = $this->message->withHeader('X-Foo', ['Foo', 'Bar']);
+        $message = $this->message->withHeader('X-Foo', array('Foo', 'Bar'));
         $this->assertNotSame($this->message, $message);
-        $this->assertEquals(['Foo', 'Bar'], $message->getHeader('X-Foo'));
+        $this->assertEquals(array('Foo', 'Bar'), $message->getHeader('X-Foo'));
     }
 
     public function testGetHeaderLineReturnsHeaderValueAsCommaConcatenatedString()
     {
-        $message = $this->message->withHeader('X-Foo', ['Foo', 'Bar']);
+        $message = $this->message->withHeader('X-Foo', array('Foo', 'Bar'));
         $this->assertNotSame($this->message, $message);
         $this->assertEquals('Foo,Bar', $message->getHeaderLine('X-Foo'));
     }
 
     public function testGetHeadersKeepsHeaderCaseSensitivity()
     {
-        $message = $this->message->withHeader('X-Foo', ['Foo', 'Bar']);
+        $message = $this->message->withHeader('X-Foo', array('Foo', 'Bar'));
         $this->assertNotSame($this->message, $message);
-        $this->assertEquals([ 'X-Foo' => [ 'Foo', 'Bar' ] ], $message->getHeaders());
+        $this->assertEquals(array( 'X-Foo' => array( 'Foo', 'Bar' ) ), $message->getHeaders());
     }
 
     public function testGetHeadersReturnsCaseWithWhichHeaderFirstRegistered()
@@ -109,7 +109,7 @@ class MessageTraitTest extends TestCase
             ->withHeader('X-Foo', 'Foo')
             ->withAddedHeader('x-foo', 'Bar');
         $this->assertNotSame($this->message, $message);
-        $this->assertEquals([ 'X-Foo' => [ 'Foo', 'Bar' ] ], $message->getHeaders());
+        $this->assertEquals(array( 'X-Foo' => array( 'Foo', 'Bar' ) ), $message->getHeaders());
     }
 
     public function testHasHeaderReturnsFalseIfHeaderIsNotPresent()
@@ -164,15 +164,15 @@ class MessageTraitTest extends TestCase
 
     public function invalidGeneralHeaderValues()
     {
-        return [
-            'null'   => [null],
-            'true'   => [true],
-            'false'  => [false],
-            'int'    => [1],
-            'float'  => [1.1],
-            'array'  => [[ 'foo' => [ 'bar' ] ]],
-            'object' => [(object) [ 'foo' => 'bar' ]],
-        ];
+        return array(
+            'null'   => array(null),
+            'true'   => array(true),
+            'false'  => array(false),
+            'int'    => array(1),
+            'float'  => array(1.1),
+            'array'  => array(array( 'foo' => array( 'bar' ) )),
+            'object' => array((object) array( 'foo' => 'bar' )),
+        );
     }
 
     /**
@@ -181,19 +181,19 @@ class MessageTraitTest extends TestCase
     public function testWithHeaderRaisesExceptionForInvalidNestedHeaderValue($value)
     {
         $this->setExpectedException('InvalidArgumentException', 'Invalid header value');
-        $message = $this->message->withHeader('X-Foo', [ $value ]);
+        $message = $this->message->withHeader('X-Foo', array( $value ));
     }
 
     public function invalidHeaderValues()
     {
-        return [
-            'null'   => [null],
-            'true'   => [true],
-            'false'  => [false],
-            'int'    => [1],
-            'float'  => [1.1],
-            'object' => [(object) [ 'foo' => 'bar' ]],
-        ];
+        return array(
+            'null'   => array(null),
+            'true'   => array(true),
+            'false'  => array(false),
+            'int'    => array(1),
+            'float'  => array(1.1),
+            'object' => array((object) array( 'foo' => 'bar' )),
+        );
     }
 
     /**
@@ -207,10 +207,10 @@ class MessageTraitTest extends TestCase
 
     public function testWithHeaderReplacesDifferentCapitalization()
     {
-        $this->message = $this->message->withHeader('X-Foo', ['foo']);
-        $new = $this->message->withHeader('X-foo', ['bar']);
-        $this->assertEquals(['bar'], $new->getHeader('x-foo'));
-        $this->assertEquals(['X-foo' => ['bar']], $new->getHeaders());
+        $this->message = $this->message->withHeader('X-Foo', array('foo'));
+        $new = $this->message->withHeader('X-foo', array('bar'));
+        $this->assertEquals(array('bar'), $new->getHeader('x-foo'));
+        $this->assertEquals(array('X-foo' => array('bar')), $new->getHeaders());
     }
 
     /**
@@ -232,14 +232,14 @@ class MessageTraitTest extends TestCase
 
     public function testHeadersInitialization()
     {
-        $headers = ['X-Foo' => ['bar']];
+        $headers = array('X-Foo' => array('bar'));
         $message = new Request(null, null, 'php://temp', $headers);
         $this->assertSame($headers, $message->getHeaders());
     }
 
     public function testGetHeaderReturnsAnEmptyArrayWhenHeaderDoesNotExist()
     {
-        $this->assertSame([], $this->message->getHeader('X-Foo-Bar'));
+        $this->assertSame(array(), $this->message->getHeader('X-Foo-Bar'));
     }
 
     public function testGetHeaderLineReturnsEmptyStringWhenHeaderDoesNotExist()
@@ -249,20 +249,20 @@ class MessageTraitTest extends TestCase
 
     public function headersWithInjectionVectors()
     {
-        return [
-            'name-with-cr'           => ["X-Foo\r-Bar", 'value'],
-            'name-with-lf'           => ["X-Foo\n-Bar", 'value'],
-            'name-with-crlf'         => ["X-Foo\r\n-Bar", 'value'],
-            'name-with-2crlf'        => ["X-Foo\r\n\r\n-Bar", 'value'],
-            'value-with-cr'          => ['X-Foo-Bar', "value\rinjection"],
-            'value-with-lf'          => ['X-Foo-Bar', "value\ninjection"],
-            'value-with-crlf'        => ['X-Foo-Bar', "value\r\ninjection"],
-            'value-with-2crlf'       => ['X-Foo-Bar', "value\r\n\r\ninjection"],
-            'array-value-with-cr'    => ['X-Foo-Bar', ["value\rinjection"]],
-            'array-value-with-lf'    => ['X-Foo-Bar', ["value\ninjection"]],
-            'array-value-with-crlf'  => ['X-Foo-Bar', ["value\r\ninjection"]],
-            'array-value-with-2crlf' => ['X-Foo-Bar', ["value\r\n\r\ninjection"]],
-        ];
+        return array(
+            'name-with-cr'           => array("X-Foo\r-Bar", 'value'),
+            'name-with-lf'           => array("X-Foo\n-Bar", 'value'),
+            'name-with-crlf'         => array("X-Foo\r\n-Bar", 'value'),
+            'name-with-2crlf'        => array("X-Foo\r\n\r\n-Bar", 'value'),
+            'value-with-cr'          => array('X-Foo-Bar', "value\rinjection"),
+            'value-with-lf'          => array('X-Foo-Bar', "value\ninjection"),
+            'value-with-crlf'        => array('X-Foo-Bar', "value\r\ninjection"),
+            'value-with-2crlf'       => array('X-Foo-Bar', "value\r\n\r\ninjection"),
+            'array-value-with-cr'    => array('X-Foo-Bar', array("value\rinjection")),
+            'array-value-with-lf'    => array('X-Foo-Bar', array("value\ninjection")),
+            'array-value-with-crlf'  => array('X-Foo-Bar', array("value\r\ninjection")),
+            'array-value-with-2crlf' => array('X-Foo-Bar', array("value\r\n\r\ninjection")),
+        );
     }
 
     /**
@@ -299,10 +299,10 @@ class MessageTraitTest extends TestCase
 
     public function testNumericHeaderValues()
     {
-        return [
-            'integer' => [ 123 ],
-            'float'   => [ 12.3 ],
-        ];
+        return array(
+            'integer' => array( 123 ),
+            'float'   => array( 12.3 ),
+        );
     }
 
     /**
@@ -313,37 +313,37 @@ class MessageTraitTest extends TestCase
     {
         $filter = new ReflectionMethod($this->message, 'filterHeaders');
         $filter->setAccessible(true);
-        $headers = [
-            'X-Test-Array'  => [ $value ],
+        $headers = array(
+            'X-Test-Array'  => array( $value ),
             'X-Test-Scalar' => $value,
-        ];
+        );
         $test = $filter->invoke($this->message, $headers);
-        $this->assertEquals([
-            [
+        $this->assertEquals(array(
+            array(
                 'x-test-array'  => 'X-Test-Array',
                 'x-test-scalar' => 'X-Test-Scalar',
-            ],
-            [
-                'X-Test-Array'  => [ $value ],
-                'X-Test-Scalar' => [ $value ],
-            ]
-        ], $test);
+            ),
+            array(
+                'X-Test-Array'  => array( $value ),
+                'X-Test-Scalar' => array( $value ),
+            )
+        ), $test);
     }
 
     public function invalidHeaderValueTypes()
     {
-        return [
-            'null'   => [null],
-            'true'   => [true],
-            'false'  => [false],
-            'object' => [(object) ['header' => ['foo', 'bar']]],
-        ];
+        return array(
+            'null'   => array(null),
+            'true'   => array(true),
+            'false'  => array(false),
+            'object' => array((object) array('header' => array('foo', 'bar'))),
+        );
     }
 
     public function invalidArrayHeaderValues()
     {
         $values = $this->invalidHeaderValueTypes();
-        $values['array'] = [['INVALID']];
+        $valuesarray['array'] = array(array('INVALID'));
         return $values;
     }
 
@@ -355,9 +355,9 @@ class MessageTraitTest extends TestCase
     {
         $filter = new ReflectionMethod($this->message, 'filterHeaders');
         $filter->setAccessible(true);
-        $headers = [
-            'X-Test-Array'  => [ $value ],
-        ];
+        $headers = array(
+            'X-Test-Array'  => array( $value ),
+        );
         $this->setExpectedException('InvalidArgumentException', 'header value type');
         $filter->invoke($this->message, $headers);
     }
@@ -370,9 +370,9 @@ class MessageTraitTest extends TestCase
     {
         $filter = new ReflectionMethod($this->message, 'filterHeaders');
         $filter->setAccessible(true);
-        $headers = [
+        $headers = array(
             'X-Test-Scalar' => $value,
-        ];
+        );
         $this->setExpectedException('InvalidArgumentException', 'header value type');
         $filter->invoke($this->message, $headers);
     }

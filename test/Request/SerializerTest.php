@@ -20,8 +20,8 @@ class SerializerTest extends TestCase
 {
     public function testSerializesBasicRequest()
     {
-        $request = (new Request())
-            ->withMethod('GET')
+        $request = new Request();
+        $request->withMethod('GET')
             ->withUri(new Uri('http://example.com/foo/bar?baz=bat'))
             ->withAddedHeader('Accept', 'text/html');
 
@@ -34,12 +34,12 @@ class SerializerTest extends TestCase
 
     public function testSerializesRequestWithBody()
     {
-        $body   = json_encode(['test' => 'value']);
+        $body   = json_encode(array('test' => 'value'));
         $stream = new Stream('php://memory', 'wb+');
         $stream->write($body);
 
-        $request = (new Request())
-            ->withMethod('POST')
+        $request = new Request();
+        $request->withMethod('POST')
             ->withUri(new Uri('http://example.com/foo/bar'))
             ->withAddedHeader('Accept', 'application/json')
             ->withAddedHeader('Content-Type', 'application/json')
@@ -52,8 +52,8 @@ class SerializerTest extends TestCase
 
     public function testSerializesMultipleHeadersCorrectly()
     {
-        $request = (new Request())
-            ->withMethod('GET')
+        $request = new Request();
+        $request->withMethod('GET')
             ->withUri(new Uri('http://example.com/foo/bar?baz=bat'))
             ->withAddedHeader('X-Foo-Bar', 'Baz')
             ->withAddedHeader('X-Foo-Bar', 'Bat');
@@ -65,18 +65,18 @@ class SerializerTest extends TestCase
 
     public function originForms()
     {
-        return [
-            'path-only'      => [
+        return array(
+            'path-only'      => array(
                 'GET /foo HTTP/1.1',
                 '/foo',
-                ['getPath' => '/foo'],
-            ],
-            'path-and-query' => [
+                array('getPath' => '/foo'),
+            ),
+            'path-and-query' => array(
                 'GET /foo?bar HTTP/1.1',
                 '/foo?bar',
-                ['getPath' => '/foo', 'getQuery' => 'bar'],
-            ],
-        ];
+                array('getPath' => '/foo', 'getQuery' => 'bar'),
+            ),
+        );
     }
 
     /**
@@ -98,50 +98,50 @@ class SerializerTest extends TestCase
 
     public function absoluteForms()
     {
-        return [
-            'path-only'      => [
+        return array(
+            'path-only'      => array(
                 'GET http://example.com/foo HTTP/1.1',
                 'http://example.com/foo',
-                [
+                array(
                     'getScheme' => 'http',
                     'getHost'   => 'example.com',
                     'getPath'   => '/foo',
-                ],
-            ],
-            'path-and-query' => [
+                ),
+            ),
+            'path-and-query' => array(
                 'GET http://example.com/foo?bar HTTP/1.1',
                 'http://example.com/foo?bar',
-                [
+                array(
                     'getScheme' => 'http',
                     'getHost'   => 'example.com',
                     'getPath'   => '/foo',
                     'getQuery'  => 'bar',
-                ],
-            ],
-            'with-port'      => [
+                ),
+            ),
+            'with-port'      => array(
                 'GET http://example.com:8080/foo?bar HTTP/1.1',
                 'http://example.com:8080/foo?bar',
-                [
+                array(
                     'getScheme' => 'http',
                     'getHost'   => 'example.com',
                     'getPort'   => 8080,
                     'getPath'   => '/foo',
                     'getQuery'  => 'bar',
-                ],
-            ],
-            'with-authority' => [
+                ),
+            ),
+            'with-authority' => array(
                 'GET https://me:too@example.com:8080/foo?bar HTTP/1.1',
                 'https://me:too@example.com:8080/foo?bar',
-                [
+                array(
                     'getScheme'   => 'https',
                     'getUserInfo' => 'me:too',
                     'getHost'     => 'example.com',
                     'getPort'     => 8080,
                     'getPath'     => '/foo',
                     'getQuery'    => 'bar',
-                ],
-            ],
-        ];
+                ),
+            ),
+        );
     }
 
     /**
@@ -190,12 +190,12 @@ class SerializerTest extends TestCase
 
     public function invalidRequestLines()
     {
-        return [
-            'missing-method'   => ['/foo/bar HTTP/1.1'],
-            'missing-target'   => ['GET HTTP/1.1'],
-            'missing-protocol' => ['GET /foo/bar'],
-            'simply-malformed' => ['What is this mess?'],
-        ];
+        return array(
+            'missing-method'   => array('/foo/bar HTTP/1.1'),
+            'missing-target'   => array('GET HTTP/1.1'),
+            'missing-protocol' => array('GET /foo/bar'),
+            'simply-malformed' => array('What is this mess?'),
+        );
     }
 
     /**
@@ -218,15 +218,15 @@ class SerializerTest extends TestCase
 
         $this->assertTrue($request->hasHeader('X-Foo-Bar'));
         $values = $request->getHeader('X-Foo-Bar');
-        $this->assertEquals(['Baz', 'Bat'], $values);
+        $this->assertEquals(array('Baz', 'Bat'), $values);
     }
 
     public function headersWithContinuationLines()
     {
-        return [
-            'space' => ["POST /foo HTTP/1.0\r\nContent-Type: text/plain\r\nX-Foo-Bar: Baz;\r\n Bat\r\n\r\nContent!"],
-            'tab' => ["POST /foo HTTP/1.0\r\nContent-Type: text/plain\r\nX-Foo-Bar: Baz;\r\n\tBat\r\n\r\nContent!"],
-        ];
+        return array(
+            'space' => array("POST /foo HTTP/1.0\r\nContent-Type: text/plain\r\nX-Foo-Bar: Baz;\r\n Bat\r\n\r\nContent!"),
+            'tab' => array("POST /foo HTTP/1.0\r\nContent-Type: text/plain\r\nX-Foo-Bar: Baz;\r\n\tBat\r\n\r\nContent!"),
+        );
     }
 
     /**
@@ -245,20 +245,20 @@ class SerializerTest extends TestCase
 
     public function messagesWithInvalidHeaders()
     {
-        return [
-            'invalid-name' => [
+        return array(
+            'invalid-name' => array(
                 "GET /foo HTTP/1.1\r\nThi;-I()-Invalid: value",
                 'Invalid header detected'
-            ],
-            'invalid-format' => [
+            ),
+            'invalid-format' => array(
                 "POST /foo HTTP/1.1\r\nThis is not a header\r\n\r\nContent",
                 'Invalid header detected'
-            ],
-            'invalid-continuation' => [
+            ),
+            'invalid-continuation' => array(
                 "POST /foo HTTP/1.1\r\nX-Foo-Bar: Baz\r\nInvalid continuation\r\nContent",
                 'Invalid header continuation'
-            ],
-        ];
+            ),
+        );
     }
 
     /**
@@ -267,7 +267,7 @@ class SerializerTest extends TestCase
     public function testDeserializationRaisesExceptionForMalformedHeaders($message, $exceptionMessage)
     {
         $this->setExpectedException('UnexpectedValueException', $exceptionMessage);
-        $request = Serializer::fromString($message);
+        Serializer::fromString($message);
     }
 
     public function testFromStreamThrowsExceptionWhenStreamIsNotReadable()
@@ -332,8 +332,9 @@ class SerializerTest extends TestCase
      */
     public function testToStringRaisesExceptionOnEmptyMethod()
     {
-        $request = (new Request())
-            ->withUri(new Uri('http://example.com/foo/bar?baz=bat'));
-        $message = Serializer::toString($request);
+        $uri = new Uri('http://example.com/foo/bar?baz=bat');
+        $request = new Request();
+        $request->withUri($uri);
+        Serializer::toString($request);
     }
 }
