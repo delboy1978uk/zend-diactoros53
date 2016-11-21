@@ -53,7 +53,7 @@ class Server
      * @param ResponseInterface $response
      */
     public function __construct(
-        callable $callback,
+        $callback,
         ServerRequestInterface $request,
         ResponseInterface $response
     ) {
@@ -108,7 +108,7 @@ class Server
      * @return static
      */
     public static function createServer(
-        callable $callback,
+        $callback,
         array $server,
         array $query,
         array $body,
@@ -134,7 +134,7 @@ class Server
      * @return static
      */
     public static function createServerFromRequest(
-        callable $callback,
+        $callback,
         ServerRequestInterface $request,
         ResponseInterface $response = null
     ) {
@@ -154,7 +154,7 @@ class Server
      * callback; any output buffered will be sent prior to any
      * response body content.
      *
-     * @param null|callable $finalHandler
+     * @param  $finalHandler
      */
     public function listen($finalHandler = null)
     {
@@ -163,7 +163,7 @@ class Server
         ob_start();
         $bufferLevel = ob_get_level();
 
-        $response = $callback($this->request, $this->response, $finalHandler);
+        $response = call_user_func_array($callback, array($this->request, $this->response, $finalHandler));
         if (! $response instanceof ResponseInterface) {
             $response = $this->response;
         }
